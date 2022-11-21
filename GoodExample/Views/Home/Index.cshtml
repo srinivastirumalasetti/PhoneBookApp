@@ -1,0 +1,210 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+
+<div ng-controller="myCntrl" >
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>   
+    
+
+    
+    <h1>Checkout Process</h1>
+
+    <br />
+
+    <input type="button" class="btnAdd" value="Admin Promotion" ng-click="AddContactDiv()" />
+    <input type="button" class="btnAdd" value="Checkout" ng-click="CalculateCheckOutDiv()" /> 
+    
+    <div ng-show="divList">
+        <br />
+        <p class="divHead">Promotion List</p>
+        <table cellpadding="12" class="table table-bordered table-hover">
+            <tr>
+                <td><b>Promotion ID</b></td>
+                <td><b>Promotion Name</b></td>
+                <td><b>SKUName</b></td>
+                <td><b>Unit Quantity</b></td>
+                <td><b>Unit Price</b></td>
+
+                <td><b>Actions</b></td>
+            </tr>
+            <tr ng-repeat="promotion in promotions | filter :SearchText">
+                <td>
+                    {{promotion.PromotionId}}
+                </td>
+                <td>
+                    {{promotion.PromotionName | lowercase}}
+                </td>
+                <td>{{promotion.SKUName}}</td>
+                <td>{{promotion.SKUIDQuantity}}</td>
+                <td>{{promotion.PromotionUnitPrice}}</td>
+                <td>
+                    <span ng-click="editPromotion(promotion)" class="btnAdd">Edit</span>
+                    <span ng-click="deletePromotion(promotion)" class="btnRed">Delete</span>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <form name="myForm" novalidate ng-submit="myForm.$valid && AddUpdatePromotion()">
+        <div ng-show="divContact">
+            <p class="divHead">{{Action}} Promotion</p>
+            <table>
+                <tr style="visibility:hidden;">
+                    <td><b>Id</b></td>
+                    <td>
+                        <input type="text" disabled="disabled" ng-model="PromotionId" />
+                    </td>
+                </tr>
+                <tr>
+                    <td><b>Promotion Name</b></td>
+                    <td>
+                        <input type="text" ng-model="PromotionName" name = "PromotionName" required />
+                    </td>
+                    <td>
+                         
+                      <div ng-messages="myForm.PromotionName.$error" ng-if="myForm.$submitted">
+                            <div ng-message="required">Please enter Promotion Name.</div>
+                        </div>
+                        
+                    </td>
+                </tr>
+                <tr>
+                    <td><b>SKU Name</b></td>
+                    <td>                        
+                        
+                        <div>
+                            <div>
+                                <div ng-dropdown-multiselect="" options="example14data" selected-model="example14model" checkboxes="true" extra-settings="example14settings"></div> <pre>Selected Model: {{example14model}} | json</pre>
+                            </div>
+                        </div>
+
+                    </td>
+                    @*<td>
+                        <div ng-messages="myForm.name.$error" ng-if="myForm.$submitted">
+                            <div ng-message="required">Please enter SKU Name.</div>
+                        </div>
+
+                    </td>*@
+                </tr>
+                <tr>
+                    <td><b>Unit Quantity</b></td>
+                    <td>
+                        <input type="text" ng-model="SKUIDQuantity" required />
+                    </td>
+                    <td>
+                        <div ng-messages="myForm.SKUIDQuantity.$error" ng-if="myForm.$submitted">
+                            <div ng-message="required">Please enter Promotion Unit Quantity.</div>
+                        </div>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td><b>Unit Price</b></td>
+                    <td>
+                        <input type="text" ng-model="PromotionUnitPrice" required />
+                    </td>
+                    <td>
+                        <div ng-messages="myForm.PromotionUnitPrice.$error" ng-if="myForm.$submitted">
+                            <div ng-message="required">Please enter Promotion Unit Price.</div>
+                        </div>
+
+                    </td>
+                </tr>
+
+
+                @*<tr>
+                    <td><b>Phone Number</b></td>
+                    <td>
+                        <input type="text" ng-model="contactPhoneNumber" name = "phonenumber" ng-minlength = "10" ng-maxlength = "10" required />
+                          
+            
+                    </td>
+                    <td>
+                        <p ng-show = "((myForm.phonenumber.$error.minlength ||
+                        myForm.phonenumber.$error.maxlength)
+                        && myForm.phonenumber.$dirty)">
+                        Phone number should be 10 digits</p>
+                       <div ng-messages="myForm.contactPhoneNumber.$error.pattern" ng-if="myForm.$submitted">
+                            <div ng-message="required"> Please enter valid Phone Number.</div>
+                        </div>
+                    </td>
+                    
+                </tr>*@
+
+                
+            </table>
+            <table>
+                <tr>
+                    <td>
+                        <button type="submit" class="btnAdd">
+                            Save
+                        </button>
+
+
+
+                    </td>
+                    <td>
+                        <input type="button" class="btnAdd" value="Cancel" ng-click="CancelContact()" />
+
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </form>
+
+    <div ng-show="divCheckOutLisCt">
+        <br />
+        <p class="divHead">Cart List</p>
+        <table>
+            <tr>
+                <td><b>Customer Name :</b></td>
+                <td>Srinivas</td>
+            </tr>
+
+        </table>
+        <br />
+        <table>
+            <tr>
+                <td><b>Enter Promotion</b></td>
+                <td>
+                    <input type="text" ng-model="pname" name="pname" required />
+                </td>
+                <td>
+                    <input type="button" class="btnAdd" value="Calculate" ng-click="CalculatePromotion(pname)" />
+                </td>
+            </tr>
+        </table>
+      
+       
+        <br />
+        <table cellpadding="12" class="table table-bordered table-hover">
+            <tr>
+                <td><b>SKUName</b></td>
+                <td><b>Unit Quantity</b></td>
+                <td><b>Unit Price</b></td>  
+                <td><b>Total Unit Price</b></td>               
+                <td><b>After Promo Unit Price</b></td>               
+            </tr>
+            <tr ng-repeat="cart in carts | filter :SearchText">
+                <td>
+                    {{cart.SKUName}}
+                </td>
+                <td>
+                    {{cart.SKUIDQuantity  | lowercase}}
+                </td>
+                <td>{{cart.UnitPrice}}</td>
+                <td>{{cart.SKUIDQuantity * cart.UnitPrice}}</td>
+                <td>
+                    <div>                      
+                        {{calcpromotion.PromotionUnitPrice}}
+                    </div>
+                    
+                </td>
+            </tr>
+        </table>       
+     
+            
+</div>
+</div>
